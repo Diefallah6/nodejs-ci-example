@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Node.js CI/CD
 
 on:
   push:
@@ -9,7 +9,6 @@ on:
 
 jobs:
   build-and-test:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -27,3 +26,18 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+  deploy-to-staging:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    environment: Staging
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Simulate deployment to Staging
+        run: |
+          echo "Deploying application to Staging environment..."
+          echo "Application version: $(git rev-parse --short HEAD)"
+          echo "Deployment to Staging successful!"
